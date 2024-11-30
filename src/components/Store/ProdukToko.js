@@ -2,22 +2,39 @@ import React, { useState, useContext } from 'react';
 import { Navbar, Nav, Container, InputGroup, FormControl, Button, Image, Badge, Row, Col, Card } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { FaSearch, FaUserCircle, FaShoppingCart } from 'react-icons/fa';
-import { UserContext } from '../../context/UserContext'; // Assuming you're using context for the user profile
-import { CartContext } from '../../context/CartContext';  // Assuming you use CartContext to manage cart items
+import { UserContext } from '../../context/UserContext'; // Context untuk data pengguna
+import { CartContext } from '../../context/CartContext'; // Context untuk data keranjang
 import './ProdukToko.css';
-import UserProfileModal from "../Profile/UserProfileModal";
-import ProductDetailModal from "../Product/ProductDetailModal";
+import UserProfileModal from "../Profile/UserProfileModal"; // Modal untuk profil pengguna
+import ProductDetailModal from "../Product/ProductDetailModal"; // Modal untuk detail produk
 
 const ProdukToko = () => {
-    const { profilePicture } = useContext(UserContext);  // Assuming you have a context for user
-    const { cartItems, addToCart } = useContext(CartContext); // Assuming CartContext is used to manage cart
-    const [selectedCategory, setSelectedCategory] = useState("sembako");
-    const [showProfileModal, setShowProfileModal] = useState(false);
-    const [showProductModal, setShowProductModal] = useState(false);
-    const [selectedProduct, setSelectedProduct] = useState(null); 
+    const { profilePicture } = useContext(UserContext); // Ambil gambar profil dari context
+    const { cartItems } = useContext(CartContext); // Ambil data keranjang dari context
+    const [selectedCategory, setSelectedCategory] = useState("sembako"); // Kategori yang dipilih
+    const [showProfileModal, setShowProfileModal] = useState(false); // State untuk menampilkan modal profil
+    const [showProductModal, setShowProductModal] = useState(false); // State untuk menampilkan modal produk
+    const [selectedProduct, setSelectedProduct] = useState(null); // Produk yang dipilih untuk ditampilkan di modal
 
-    const handleProfileClick = () => setShowProfileModal(true);
-    const handleCloseModal = () => setShowProfileModal(false);
+    // Fungsi untuk menangani klik pada kategori
+    const handleCategoryClick = (category) => setSelectedCategory(category);
+
+    // Fungsi untuk menangani klik pada produk
+    const handleProductClick = (product) => {
+        setSelectedProduct(product); // Simpan produk yang dipilih
+        setShowProductModal(true);  // Tampilkan modal produk
+    };
+
+    // Fungsi untuk menutup modal produk
+    const handleCloseProductModal = () => {
+        setShowProductModal(false);
+        setSelectedProduct(null); // Hapus produk yang dipilih setelah modal ditutup
+    };
+
+    // Fungsi untuk menutup modal profil
+    const handleCloseProfileModal = () => {
+        setShowProfileModal(false); // Menutup modal profil
+    };
 
     const products = {
         sembako: [
@@ -41,16 +58,8 @@ const ProdukToko = () => {
         ],
     };
 
-    // Handling category click
-    const handleCategoryClick = (category) => setSelectedCategory(category);
-
-    const handleProductClick = (product) => {
-        setSelectedProduct(product);          // Set selected product data
-        setShowProductModal(true);            // Open the ProductDetailModal
-    };
-
     return (
-      <div className="home-container">
+        <div className="home-container">
             {/* Navbar */}
             <Navbar bg="light" expand="lg" className="mb-4">
                 <Container>
@@ -58,30 +67,23 @@ const ProdukToko = () => {
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="ms-auto d-flex align-items-center">
-                            {/* Navbar Links */}
                             <Nav.Link as={Link} to="/" className="me-3">Beranda</Nav.Link>
                             <Nav.Link as={Link} to="/products" className="me-3">Produk</Nav.Link>
                             <Nav.Link as={Link} to="/store-info" className="me-3">Informasi Toko</Nav.Link>
-
-                            {/* Search Bar */}
                             <InputGroup className="me-3 search-bar">
                                 <FormControl type="search" placeholder="Cari barang..." aria-label="Search" />
                                 <Button variant="outline-success">
                                     <FaSearch />
                                 </Button>
                             </InputGroup>
-
-                        {/* Profile Section */}
-                        <Nav.Link onClick={handleProfileClick} className="d-flex align-items-center me-3 profile-section">
-                            {profilePicture ? (
-                                <Image src={profilePicture} roundedCircle width={32} height={32} alt="User" className="me-2 profile-picture" />
-                            ) : (
-                                <FaUserCircle size={32} className="me-2 profile-picture" />
-                            )}
-                            <span className="user-name">Evelyn</span>
-                        </Nav.Link>
-
-                            {/* Cart Icon with Badge */}
+                            <Nav.Link onClick={() => setShowProfileModal(true)} className="d-flex align-items-center me-3 profile-section">
+                                {profilePicture ? (
+                                    <Image src={profilePicture} roundedCircle width={32} height={32} alt="User" className="me-2 profile-picture" />
+                                ) : (
+                                    <FaUserCircle size={32} className="me-2 profile-picture" />
+                                )}
+                                <span className="user-name">Evelyn</span>
+                            </Nav.Link>
                             <Nav.Link as={Link} to="/cart" className="position-relative cart-icon">
                                 <FaShoppingCart size={24} />
                                 {cartItems.length > 0 && (
@@ -95,10 +97,10 @@ const ProdukToko = () => {
                 </Container>
             </Navbar>
 
+            {/* Kategori */}
             <Container className="category-section-title mb-4">
-              <h2 className="text-start">Kategori</h2>
+                <h2 className="text-start">Kategori</h2>
             </Container>
-
             <Container className="category-section mb-4">
                 <Row>
                     {Object.keys(products).map((category) => (
@@ -115,18 +117,17 @@ const ProdukToko = () => {
                 </Row>
             </Container>
 
-
-            {/* Product Listing */}
+            {/* Produk */}
             <Container>
                 <Row>
                     {products[selectedCategory].map((product) => (
                         <Col md={4} key={product.id} className="mb-4">
-                            <Card onClick={() => handleProductClick(product)}> {/* Click to handle product interaction */}
+                            <Card onClick={() => handleProductClick(product)}> {/* Klik untuk detail */}
                                 <Card.Img variant="top" src={product.imageUrl} />
                                 <Card.Body>
                                     <Card.Title>{product.name}</Card.Title>
                                     <Card.Text>Harga: Rp{product.price.toLocaleString()}</Card.Text>
-                                    <Card.Text>Stock Barang: {product.stock}</Card.Text>
+                                    <Card.Text>Stok: {product.stock}</Card.Text>
                                 </Card.Body>
                             </Card>
                         </Col>
@@ -134,24 +135,27 @@ const ProdukToko = () => {
                 </Row>
             </Container>
 
+            {/* Modal Produk */}
             {showProductModal && (
                 <ProductDetailModal
                     show={showProductModal}
-                    onHide={() => setShowProductModal(false)}
+                    handleClose={handleCloseProductModal} // Berikan fungsi handleClose
                     product={selectedProduct}
-                    addToCart={addToCart}  // Pass addToCart function to ProductDetailModal
                 />
             )}
 
+            {/* Modal Profil */}
             {showProfileModal && (
-                <UserProfileModal show={showProfileModal} onHide={handleCloseModal} />
+                <UserProfileModal
+                    show={showProfileModal}
+                    handleClose={handleCloseProfileModal} // Menggunakan handleCloseProfileModal
+                />
             )}
 
             {/* Footer */}
             <footer className="footer">
                 <p>&copy; 2024 Toko Kelontong. All rights reserved.</p>
             </footer>
-
         </div>
     );
 };
