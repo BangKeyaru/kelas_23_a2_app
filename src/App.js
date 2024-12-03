@@ -11,6 +11,7 @@ import "slick-carousel/slick/slick-theme.css";
 
 import { UserProvider } from "./context/UserContext";
 import { CartProvider } from "./context/CartContext";
+
 import Home from "./pages/Home/Home";
 import Cart from "./pages/Cart/Cart";
 import Checkout from "./pages/Checkout/Checkout";
