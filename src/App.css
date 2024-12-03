@@ -36,3 +36,12 @@
     transform: rotate(360deg);
   }
 }
+
+.hidden-scroll {
+  overflow-y: scroll; /* Masih bisa di-scroll */
+  scrollbar-width: none; /* Firefox */
+}
+
+.hidden-scroll::-webkit-scrollbar {
+  display: none; /* Chrome, Safari */
+}

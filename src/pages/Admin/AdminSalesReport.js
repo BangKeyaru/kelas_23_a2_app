@@ -1,5 +1,5 @@
 // src/components/Admin/AdminSalesReport.js
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Container, Navbar, Nav, Dropdown, Table, Form, Button } from "react-bootstrap";
 import { FaUserCircle } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
@@ -8,7 +8,6 @@ import "./AdminSalesReport.css";
 const AdminSalesReport = () => {
     const navigate = useNavigate();
     const [salesData] = useState([
-        // Mock data for sales (in a real app, fetch this data from an API)
         {
             id: 1,
             username: "john_doe",
@@ -32,22 +31,12 @@ const AdminSalesReport = () => {
     const [filterMonth, setFilterMonth] = useState(new Date().getMonth() + 1);
     const [filterYear, setFilterYear] = useState(new Date().getFullYear());
 
-    // Calculate today's sales
-    useEffect(() => {
-        const today = new Date().toISOString().split("T")[0];
-        const todaySalesData = salesData.filter(sale => sale.orderDate === today);
-        setTodaySales(todaySalesData.length);
-        setItemsSoldToday(todaySalesData.reduce((acc, sale) => acc + 1, 0));
-    }, [salesData]);
-
-    // Handle month/year change
     const handleFilterChange = (e) => {
         const { name, value } = e.target;
         if (name === "month") setFilterMonth(value);
         if (name === "year") setFilterYear(value);
     };
 
-    // Handle logout
     const handleLogout = () => {
         localStorage.removeItem("authToken");
         navigate("/login");
@@ -101,39 +90,55 @@ const AdminSalesReport = () => {
                 </div>
 
                 {/* Filters for Month and Year */}
-                <Form className="filter-form mb-4">
-                    <Form.Group controlId="filterMonth">
-                        <Form.Label>Bulan</Form.Label>
-                        <Form.Control
-                            as="select"
-                            name="month"
-                            value={filterMonth}
-                            onChange={handleFilterChange}
+                <div className="d-flex justify-content-end mb-4">
+                    <Form className="filter-form d-flex align-items-center">
+                        {/* Filter for Month */}
+                        <Form.Group controlId="filterMonth" className="mr-3">
+                            <Form.Label className="mr-2">Bulan</Form.Label>
+                            <Form.Control
+                                as="select"
+                                name="month"
+                                value={filterMonth}
+                                onChange={handleFilterChange}
+                            >
+                                {[...Array(12).keys()].map((month) => (
+                                    <option key={month + 1} value={month + 1}>
+                                        {new Date(0, month).toLocaleString("default", { month: "long" })}
+                                    </option>
+                                ))}
+                            </Form.Control>
+                        </Form.Group>
+
+                        {/* Filter for Year */}
+                        <Form.Group controlId="filterYear" className="mr-3">
+                            <Form.Label className="mr-2">Tahun</Form.Label>
+                            <Form.Control
+                                as="select"
+                                name="year"
+                                value={filterYear}
+                                onChange={handleFilterChange}
+                            >
+                                {Array.from(
+                                    { length: new Date().getFullYear() - 2019 },
+                                    (_, i) => 2020 + i
+                                ).map((year) => (
+                                    <option key={year} value={year}>
+                                        {year}
+                                    </option>
+                                ))}
+                            </Form.Control>
+                        </Form.Group>
+
+                        {/* Button for Applying Filters */}
+                        <Button
+                            variant="primary"
+                            onClick={() => console.log("Filter applied")}
+                            className="ml-3 mb-2"
                         >
-                            {[...Array(12).keys()].map(month => (
-                                <option key={month + 1} value={month + 1}>
-                                    {new Date(0, month).toLocaleString("default", { month: "long" })}
-                                </option>
-                            ))}
-                        </Form.Control>
-                    </Form.Group>
-
-                    <Form.Group controlId="filterYear" className="ml-3">
-                        <Form.Label>Tahun</Form.Label>
-                        <Form.Control
-                            type="number"
-                            name="year"
-                            value={filterYear}
-                            onChange={handleFilterChange}
-                            min="2020"
-                            max={new Date().getFullYear()}
-                        />
-                    </Form.Group>
-
-                    <Button variant="primary" className="ml-3" onClick={() => console.log("Filter applied")}>
-                        Tampilkan
-                    </Button>
-                </Form>
+                            Tampilkan
+                        </Button>
+                    </Form>
+                </div>
 
                 {/* Sales Table */}
                 <Table striped bordered hover responsive>

@@ -43,6 +43,23 @@ const ProtectedRoute = ({
   return element;
 };
 
+const HiddenScrollDiv = ({ children }) => {
+  return (
+    <div
+    style={{
+      width: "100%",
+      height: "100vh", // Menyesuaikan tinggi layar
+      overflowY: "scroll", // Aktifkan scroll hanya pada elemen ini
+      scrollbarWidth: "none", // Firefox scrollbar
+      msOverflowStyle: "none", // IE scrollbar
+    }}
+    className="hidden-scroll"
+    >
+      {children}
+    </div>
+  );
+};
+
 function App() {
   const isAuthenticated = localStorage.getItem("authToken") !== null;
   const isAdmin = localStorage.getItem("userRole") === "admin";
@@ -63,26 +80,34 @@ function App() {
             <Route path="/register" element={<Register />} />
 
             {/* Public Route for Store Information */}
-            <Route path="/store-info" element={<StoreInfo />} />
-            <Route path="/products" element={<ProdukToko />} />
+            <Route path="/store-info" element={<HiddenScrollDiv><StoreInfo /></HiddenScrollDiv>} isAuthenticated={isAuthenticated} isAdmin={isAdmin} isAdminRoute={false}/>
+            <Route path="/products" element={<HiddenScrollDiv><ProdukToko /></HiddenScrollDiv>} isAuthenticated={isAuthenticated} isAdmin={isAdmin} isAdminRoute={false}/>
 
             {/* Protected User Routes */}
             <Route
-              path="/home"
-              element={
-                <ProtectedRoute
-                  element={<Home />}
-                  isAuthenticated={isAuthenticated}
-                  isAdmin={isAdmin}
-                  isAdminRoute={false}
-                />
-              }
-            />
+            path="/home"
+            element={
+              <ProtectedRoute
+                element={
+                  <HiddenScrollDiv>
+                    <Home />
+                  </HiddenScrollDiv>
+                }
+                isAuthenticated={isAuthenticated}
+                isAdmin={isAdmin}
+                isAdminRoute={false}
+              />
+            }
+          />
             <Route
               path="/cart"
               element={
                 <ProtectedRoute
-                  element={<Cart />}
+                element={
+                  <HiddenScrollDiv>
+                    <Cart />
+                  </HiddenScrollDiv>
+                }
                   isAuthenticated={isAuthenticated}
                   isAdmin={isAdmin}
                   isAdminRoute={false}

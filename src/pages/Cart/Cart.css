@@ -55,3 +55,15 @@
     padding: 20px;
     font-size: 1.2rem;
 }
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+    padding-left: 0px;
+    text-align: center;
+}
+
+input[type="number"] {
+    -moz-appearance: textfield; /* Untuk Firefox */
+}
