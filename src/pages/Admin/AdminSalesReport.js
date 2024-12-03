@@ -1,5 +1,5 @@
 // src/components/Admin/AdminSalesReport.js
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Container, Navbar, Nav, Dropdown, Table, Form, Button } from "react-bootstrap";
 import { FaUserCircle } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
@@ -12,7 +12,7 @@ const AdminSalesReport = () => {
             id: 1,
             username: "john_doe",
             productCode: "P001",
-            orderDate: "2024-11-07",
+            orderDate: "2024-12-03",
             orderTime: "10:30",
             totalPrice: 15000,
         },
@@ -30,6 +30,13 @@ const AdminSalesReport = () => {
     const [itemsSoldToday, setItemsSoldToday] = useState(0);
     const [filterMonth, setFilterMonth] = useState(new Date().getMonth() + 1);
     const [filterYear, setFilterYear] = useState(new Date().getFullYear());
+
+    useEffect(() => {
+        const today = new Date().toISOString().split("T")[0];
+        const todaySalesData = salesData.filter(sale => sale.orderDate === today);
+        setTodaySales(todaySalesData.length);
+        setItemsSoldToday(todaySalesData.reduce((acc, sale) => acc + 1, 0));
+    }, [salesData]);
 
     const handleFilterChange = (e) => {
         const { name, value } = e.target;
