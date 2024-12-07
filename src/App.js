@@ -77,8 +77,8 @@ function App() {
             />
 
             {/* Authentication Routes */}
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
+            <Route path="/login" element={<HiddenScrollDiv><Login /></HiddenScrollDiv>}/>
+            <Route path="/register" element={<HiddenScrollDiv><Register /></HiddenScrollDiv>}/>
 
             {/* Public Route for Store Information */}
             <Route path="/store-info" element={<HiddenScrollDiv><StoreInfo /></HiddenScrollDiv>} isAuthenticated={isAuthenticated} isAdmin={isAdmin} isAdminRoute={false}/>
@@ -119,7 +119,11 @@ function App() {
               path="/checkout"
               element={
                 <ProtectedRoute
-                  element={<Checkout />}
+                element={
+                  <HiddenScrollDiv>
+                    <Checkout />
+                  </HiddenScrollDiv>
+                }
                   isAuthenticated={isAuthenticated}
                   isAdmin={isAdmin}
                   isAdminRoute={false}
@@ -130,7 +134,11 @@ function App() {
               path="/edit-profile"
               element={
                 <ProtectedRoute
-                  element={<EditProfile />}
+                element={
+                  <HiddenScrollDiv>
+                    <EditProfile />
+                  </HiddenScrollDiv>
+                }
                   isAuthenticated={isAuthenticated}
                   isAdmin={isAdmin}
                   isAdminRoute={false}
@@ -141,7 +149,11 @@ function App() {
               path="/order-history"
               element={
                 <ProtectedRoute
-                  element={<OrderHistory />}
+                element={
+                  <HiddenScrollDiv>
+                    <OrderHistory />
+                  </HiddenScrollDiv>
+                }
                   isAuthenticated={isAuthenticated}
                   isAdmin={isAdmin}
                   isAdminRoute={false}
@@ -154,7 +166,11 @@ function App() {
               path="/admin/dashboard"
               element={
                 <ProtectedRoute
-                  element={<AdminDashboard />}
+                element={
+                  <HiddenScrollDiv>
+                    <AdminDashboard />
+                  </HiddenScrollDiv>
+                }
                   isAuthenticated={isAuthenticated}
                   isAdmin={isAdmin}
                   isAdminRoute={true}
@@ -165,7 +181,11 @@ function App() {
               path="/admin-account"
               element={
                 <ProtectedRoute
-                  element={<AdminAccount />}
+                element={
+                  <HiddenScrollDiv>
+                    <AdminAccount />
+                  </HiddenScrollDiv>
+                }
                   isAuthenticated={isAuthenticated}
                   isAdmin={isAdmin}
                   isAdminRoute={true}
@@ -176,7 +196,11 @@ function App() {
               path="/admin/products"
               element={
                 <ProtectedRoute
-                  element={<AdminProductList />}
+                element={
+                  <HiddenScrollDiv>
+                    <AdminProductList/>
+                  </HiddenScrollDiv>
+                }
                   isAuthenticated={isAuthenticated}
                   isAdmin={isAdmin}
                   isAdminRoute={true}
@@ -187,7 +211,11 @@ function App() {
               path="/admin/users"
               element={
                 <ProtectedRoute
-                  element={<AdminUserList />}
+                element={
+                  <HiddenScrollDiv>
+                    <AdminUserList />
+                  </HiddenScrollDiv>
+                }
                   isAuthenticated={isAuthenticated}
                   isAdmin={isAdmin}
                   isAdminRoute={true}
@@ -198,7 +226,11 @@ function App() {
               path="/admin/orders"
               element={
                 <ProtectedRoute
-                  element={<AdminOrderList />}
+                element={
+                  <HiddenScrollDiv>
+                    <AdminOrderList />
+                  </HiddenScrollDiv>
+                }
                   isAuthenticated={isAuthenticated}
                   isAdmin={isAdmin}
                   isAdminRoute={true}
@@ -209,7 +241,11 @@ function App() {
               path="/admin/sales"
               element={
                 <ProtectedRoute
-                  element={<AdminSalesReport />}
+                element={
+                  <HiddenScrollDiv>
+                    <AdminSalesReport />
+                  </HiddenScrollDiv>
+                }
                   isAuthenticated={isAuthenticated}
                   isAdmin={isAdmin}
                   isAdminRoute={true}
@@ -220,7 +256,11 @@ function App() {
               path="/admin/feedback"
               element={
                 <ProtectedRoute
-                  element={<AdminFeedback />}
+                element={
+                  <HiddenScrollDiv>
+                    <AdminFeedback />
+                  </HiddenScrollDiv>
+                }
                   isAuthenticated={isAuthenticated}
                   isAdmin={isAdmin}
                   isAdminRoute={true}

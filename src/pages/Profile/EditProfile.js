@@ -9,8 +9,9 @@ const EditProfile = () => {
     const { profilePicture, updateProfilePicture, namaPengguna, updateNamaPengguna, cartItems = [] } = useContext(UserContext);
     const [userId] = useState("69"); // Example user ID, should be fetched from context or API
     const [emailPengguna, setEmailPengguna] = useState("");
-    const [kecamatan, setKecamatan] = useState("");
-    const [alamatLengkap, setAlamatLengkap] = useState("");
+    const [desaKelurahan, setDesaKelurahan] = useState(""); // New field
+    const [rtRw, setRtRw] = useState(""); // New field
+    const [kodePos, setKodePos] = useState(""); // New field
 
     const [editedNamaPengguna, setEditedNamaPengguna] = useState(namaPengguna);
     const [showSuccessMessage, setShowSuccessMessage] = useState(false); // State for showing the success message
@@ -46,46 +47,46 @@ const EditProfile = () => {
         <div className="edit-profile-page">
             {/* Navbar Header */}
             <Navbar bg="light" expand="lg" className="mb-4">
-            <Container>
-                <Navbar.Brand href="/"><h1>Toko Yenni</h1></Navbar.Brand>
-                <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                <Navbar.Collapse id="basic-navbar-nav">
-                    <Nav className="ms-auto d-flex align-items-center">
-                        {/* Added Navbar Links */}
-                        <Nav.Link as={Link} to="/" className="me-3">Beranda</Nav.Link>
-                        <Nav.Link as={Link} to="/products" className="me-3">Produk</Nav.Link>
-                        <Nav.Link as={Link} to="/store-info" className="me-3">Informasi Toko</Nav.Link>
+                <Container>
+                    <Navbar.Brand href="/"><h1>Toko Yenni</h1></Navbar.Brand>
+                    <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                    <Navbar.Collapse id="basic-navbar-nav">
+                        <Nav className="ms-auto d-flex align-items-center">
+                            {/* Added Navbar Links */}
+                            <Nav.Link as={Link} to="/" className="me-3">Beranda</Nav.Link>
+                            <Nav.Link as={Link} to="/products" className="me-3">Produk</Nav.Link>
+                            <Nav.Link as={Link} to="/store-info" className="me-3">Informasi Toko</Nav.Link>
 
-                        {/* Search Bar */}
-                        <InputGroup className="me-3 search-bar">
-                            <FormControl type="search" placeholder="Cari barang..." aria-label="Search" />
-                            <Button variant="outline-success">
-                                <FaSearch />
-                            </Button>
-                        </InputGroup>
+                            {/* Search Bar */}
+                            <InputGroup className="me-3 search-bar">
+                                <FormControl type="search" placeholder="Cari barang..." aria-label="Search" />
+                                <Button variant="outline-success">
+                                    <FaSearch />
+                                </Button>
+                            </InputGroup>
 
-                        {/* Profile Section */}
-                        <Nav.Link onClick={handleProfileClick} className="d-flex align-items-center me-3 profile-section">
-                            {profilePicture ? (
-                                <Image src={profilePicture} roundedCircle width={32} height={32} alt="User" className="me-2 profile-picture" />
-                            ) : (
-                                <FaUserCircle size={32} className="me-2 profile-picture" />
-                            )}
-                            <span className="user-name">Evelyn</span>
-                        </Nav.Link>
+                            {/* Profile Section */}
+                            <Nav.Link onClick={handleProfileClick} className="d-flex align-items-center me-3 profile-section">
+                                {profilePicture ? (
+                                    <Image src={profilePicture} roundedCircle width={32} height={32} alt="User" className="me-2 profile-picture" />
+                                ) : (
+                                    <FaUserCircle size={32} className="me-2 profile-picture" />
+                                )}
+                                <span className="user-name">Evelyn</span>
+                            </Nav.Link>
 
-                        {/* Cart Icon with Badge */}
-                        <Nav.Link as={Link} to="/cart" className="position-relative cart-icon">
-                            <FaShoppingCart size={24} />
-                            {cartItems.length > 0 && (
-                                <Badge pill bg="danger" className="cart-badge position-absolute top-0 start-100 translate-middle">
-                                    {cartItems.length}
-                                </Badge>
-                            )}
-                        </Nav.Link>
-                    </Nav>
-                </Navbar.Collapse>
-            </Container>
+                            {/* Cart Icon with Badge */}
+                            <Nav.Link as={Link} to="/cart" className="position-relative cart-icon">
+                                <FaShoppingCart size={24} />
+                                {cartItems.length > 0 && (
+                                    <Badge pill bg="danger" className="cart-badge position-absolute top-0 start-100 translate-middle">
+                                        {cartItems.length}
+                                    </Badge>
+                                )}
+                            </Nav.Link>
+                        </Nav>
+                    </Navbar.Collapse>
+                </Container>
             </Navbar>
 
             {/* Edit Profile Form */}
@@ -122,23 +123,33 @@ const EditProfile = () => {
                         />
                     </Form.Group>
 
-                    <Form.Group className="mb-3" controlId="formKecamatan">
-                        <Form.Label>Kecamatan (Nama Daerah)</Form.Label>
+                    {/* Address Fields */}
+                    <Form.Group className="mb-3" controlId="formDesaKelurahan">
+                        <Form.Label>Desa/Kelurahan</Form.Label>
                         <Form.Control
                             type="text"
-                            value={kecamatan}
-                            onChange={(e) => setKecamatan(e.target.value)}
+                            value={desaKelurahan}
+                            onChange={(e) => setDesaKelurahan(e.target.value)}
                             required
                         />
                     </Form.Group>
 
-                    <Form.Group className="mb-3" controlId="formAlamatLengkap">
-                        <Form.Label>Alamat Lengkap</Form.Label>
+                    <Form.Group className="mb-3" controlId="formRtRw">
+                        <Form.Label>RT/RW</Form.Label>
                         <Form.Control
-                            as="textarea"
-                            rows={3}
-                            value={alamatLengkap}
-                            onChange={(e) => setAlamatLengkap(e.target.value)}
+                            type="text"
+                            value={rtRw}
+                            onChange={(e) => setRtRw(e.target.value)}
+                            required
+                        />
+                    </Form.Group>
+
+                    <Form.Group className="mb-3" controlId="formKodePos">
+                        <Form.Label>Kode Pos</Form.Label>
+                        <Form.Control
+                            type="text"
+                            value={kodePos}
+                            onChange={(e) => setKodePos(e.target.value)}
                             required
                         />
                     </Form.Group>
